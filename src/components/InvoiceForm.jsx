@@ -248,16 +248,15 @@ const InvoiceForm = () => {
   };
 
   const handleCopyInvoice = () => {
-    const receivedInvoice = getOneInvoice(copyId);
-    
-    if (receivedInvoice !== null && receivedInvoice !== undefined) {
+    const recievedInvoice = getOneInvoice(copyId);
+    if (recievedInvoice) {
       setFormData({
-        ...receivedInvoice,
-        id: formData.id, // Presuming keeping the existing ID
-        invoiceNumber: formData.invoiceNumber, // Presuming keeping the existing invoice number
+        ...recievedInvoice,
+        id: formData.id,
+        invoiceNumber: formData.invoiceNumber,
       });
     } else {
-      alert("Invoice does not exist!");
+      alert("Invoice does not exists!!!!!");
     }
   };
 
@@ -526,7 +525,6 @@ const InvoiceForm = () => {
                 value={current}
               >
                 <option value="USD">USD (United States Dollar)</option>
-                <option value="INR">INR (Indian Rupee)</option>
                 <option value="GBP">GBP (British Pound Sterling)</option>
                 <option value="JPY">JPY (Japanese Yen)</option>
                 <option value="CAD">CAD (Canadian Dollar)</option>

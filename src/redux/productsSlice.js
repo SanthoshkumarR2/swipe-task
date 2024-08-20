@@ -5,7 +5,7 @@ import generateRandomId from "../utils/generateRandomId";
 /**
  * Single source of truth for product data
  */
-const productsSlice = createSlice({
+const productSlice = createSlice({
   name: "products",
   initialState: [
     ...[1, 2, 3].map((_, index) => {
@@ -45,6 +45,6 @@ const productsSlice = createSlice({
 });
 
 export const { addProduct, updateProduct, deleteProduct } =
-  productsSlice.actions;
-export const selectProductList = (state) => state.products;
-export default productsSlice.reducer;
+  productSlice.actions;
+export const selectProductsList = (state) => state.products;
+export default productSlice.reducer;

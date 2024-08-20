@@ -1,33 +1,24 @@
 export const newCurrencySymbol = (currency) => {
-    let newCurrencySymbol = "$";
-    switch (currency) {
-      case "USD":
-        newCurrencySymbol = "$";
-        break;
-        case "INR":
-          newCurrencySymbol = "₹";
-          break;
-      case "GBP":
-        newCurrencySymbol = "£";
-        break;
-      case "AUD":
-        newCurrencySymbol = "$";
-        break;
-      case "CAD":
-        newCurrencySymbol = "$";
-        break;
-      case "CNY":
-        newCurrencySymbol = "¥";
-        break;
+  let newCurrencySymbol = "₹";
+  switch (currency) {
+    case "INR":
+      newCurrencySymbol = "₹";
+      break;
+    case "USD":
+      newCurrencySymbol = "$";
+      break;
+    case "GBP":
+      newCurrencySymbol = "£";
+      break;
       case "JPY":
         newCurrencySymbol = "¥";
         break;
-      case "SGD":
-        newCurrencySymbol = "$";
-        break;
-      default:
-        newCurrencySymbol = "$";
-        break;
-    }
-    return newCurrencySymbol;
-  };
+    case "AUD":
+      newCurrencySymbol = "$";
+      break;
+    case "CNY":
+      newCurrencySymbol = "¥";
+      break;
+  }
+  return newCurrencySymbol;
+};

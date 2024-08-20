@@ -11,8 +11,7 @@ import { convertPrice } from "../utils/currencyCoverter";
 import { newCurrencySymbol } from "../utils/newCurrencySymbol";
 
 const InvoiceList = () => {
-  const { invoiceList, getOneInvoice } = useInvoiceListData();
-  const isListEmpty = invoiceList.length === 0;
+  const { invoiceList = [], getOneInvoice } = useInvoiceListData(); // Default to empty array if undefined
   const [copyId, setCopyId] = useState("");
   const [showModal, setShowModal] = useState(false);
   const [selectedInvoice, setSelectedInvoice] = useState(null);
@@ -52,6 +51,8 @@ const InvoiceList = () => {
     setShowModal(false);
     setSelectedInvoice(null);
   };
+
+  const isListEmpty = invoiceList.length === 0; // Safe check
 
   return (
     <div className="App d-flex justify-content-center flex-column">
@@ -104,13 +105,15 @@ const InvoiceList = () => {
                   </thead>
                   <tbody>
                     {invoiceList.map((invoice) => (
-                      <InvoiceRow
-                        key={invoice.id}
-                        invoice={invoice}
-                        onEdit={handleEditClick}
-                        onDelete={handleDeleteClick}
-                        onView={openModal}
-                      />
+                      invoice && invoice.id ? ( // Safe check for undefined invoice and id
+                        <InvoiceRow
+                          key={invoice.id}
+                          invoice={invoice}
+                          onEdit={handleEditClick}
+                          onDelete={handleDeleteClick}
+                          onView={openModal}
+                        />
+                      ) : null
                     ))}
                   </tbody>
                 </Table>
@@ -122,12 +125,12 @@ const InvoiceList = () => {
               showModal={showModal}
               closeModal={closeModal}
               info={selectedInvoice}
-              items={selectedInvoice.items}
-              currency={selectedInvoice.currency}
-              subTotal={selectedInvoice.subTotal}
-              taxAmount={selectedInvoice.taxAmount}
-              discountAmount={selectedInvoice.discountAmount}
-              total={selectedInvoice.total}
+              items={selectedInvoice.items || []} // Default to empty array if undefined
+              currency={selectedInvoice.currency || ""}
+              subTotal={selectedInvoice.subTotal || 0}
+              taxAmount={selectedInvoice.taxAmount || 0}
+              discountAmount={selectedInvoice.discountAmount || 0}
+              total={selectedInvoice.total || 0}
             />
           )}
         </Col>
@@ -141,10 +144,10 @@ const InvoiceRow = ({ invoice, onEdit, onDelete, onView }) => {
 
   return (
     <tr>
-      <td>{invoice.invoiceNumber}</td>
-      <td>{invoice.id}</td>
-      <td className="fw-normal">{invoice.billTo}</td>
-      <td className="fw-normal">{invoice.dateOfIssue}</td>
+      <td>{invoice.invoiceNumber || "N/A"}</td> {/* Default value if undefined */}
+      <td>{invoice.id || "N/A"}</td> {/* Default value if undefined */}
+      <td className="fw-normal">{invoice.billTo || "N/A"}</td>
+      <td className="fw-normal">{invoice.dateOfIssue || "N/A"}</td>
       <td className="fw-normal">
         {current === "USD" ? (
           <div>

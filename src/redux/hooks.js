@@ -1,6 +1,6 @@
 import { useSelector } from "react-redux";
 import { selectInvoiceList } from "./invoicesSlice";
-import { selectProductList } from "./productsSlice";
+import { selectProductsList } from "./productsSlice";
 import {
   selectCurrentCurrency,
   selectExchangeRates,
@@ -11,49 +11,61 @@ const populateInvoiceWithProducts = (invoice, productsList) => {
   const productsInInvoice = [];
   const idQuantity = {}; // For O(1) data access
 
-  invoice.items.forEach((item) => {
-    idQuantity[item.id] = item.quantity;
-  });
+  if (invoice && invoice.items) {
+    invoice.items.forEach((item) => {
+      idQuantity[item.id] = item.quantity;
+    });
 
-  productsList.forEach((product) => {
-    if (idQuantity.hasOwnProperty(product.id)) {
-      productsInInvoice.push({
-        ...product,
-        quantity: idQuantity[product.id],
-      });
-    }
-  });
+    productsList.forEach((product) => {
+      if (idQuantity.hasOwnProperty(product.id)) {
+        productsInInvoice.push({
+          ...product,
+          quantity: idQuantity[product.id],
+        });
+      }
+    });
+  }
+
   return { ...invoice, items: productsInInvoice };
 };
 
 export const useInvoiceListData = () => {
   const invoices = useSelector(selectInvoiceList);
-  const productsList = useSelector(selectProductList);
+  const productsList = useSelector(selectProductsList);
 
   const getOneInvoice = (receivedId) => {
-    const invoice =
-      invoiceList.find(
-        (invoice) => invoice.id.toString() === receivedId.toString()
-      ) || null;
+    if (!receivedId) {
+      console.error("Received ID is undefined or null");
+      return null;
+    }
+
+    const invoice = invoices.find(
+      (invoice) => invoice.id.toString() === receivedId.toString()
+    );
+
+    if (!invoice) {
+      console.error(`Invoice with ID ${receivedId} not found`);
+      return null;
+    }
 
     return populateInvoiceWithProducts(invoice, productsList);
   };
 
-  const invoiceList = invoices.map((invoice) =>
+  const populatedInvoiceList = invoices.map((invoice) =>
     populateInvoiceWithProducts(invoice, productsList)
   );
 
-  const listSize = invoiceList.length;
+  const listSize = populatedInvoiceList.length;
 
   return {
-    invoiceList,
+    invoiceList: populatedInvoiceList,
     getOneInvoice,
     listSize,
   };
 };
 
 export const useProductsListData = () => {
-  const productsList = useSelector(selectProductList);
+  const productsList = useSelector(selectProductsList);
 
   return {
     productsList,
